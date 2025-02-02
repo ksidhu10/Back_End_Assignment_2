@@ -1,9 +1,8 @@
-// src/api/v1/routes/healthRoute.ts
 import { Router, Request, Response } from 'express';
 
 /**
  * @swagger
- * /health:
+ * /api/v1/health:
  *   get:
  *     summary: Check the health of the server
  *     description: Returns a simple message indicating the server is healthy
@@ -21,8 +20,8 @@ import { Router, Request, Response } from 'express';
  */
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.status(200).send({ message: 'Server is healthy' }) ;
+router.get('/health', (req: Request, res: Response) => {
+  res.status(200).send({ message: 'Server is healthy' });
 });
 
 export default router;
