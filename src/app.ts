@@ -1,36 +1,21 @@
-import express from "express";
-import morgan from "morgan";
-import swaggerUi from "swagger-ui-express";
-import swaggerJSDoc from "swagger-jsdoc";
+import express from 'express';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from './swagger';  // Import the Swagger docs
 
-// Initialize Express app
 const app = express();
 
-// Use morgan for HTTP request logging
 app.use(morgan("combined"));
 
-// Swagger definition
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0", // OpenAPI version
-    info: {
-      title: "API Documentation",
-      version: "1.0.0",
-      description: "A simple Express API"
-    }
-  },
-  // Path to the API docs
-  apis: ["./src/api/v1/routes/*.ts"],
-};
-
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-
-// Set up Swagger UI
+// Serve Swagger UI at /api-docs endpoint
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Example health check route
 app.get("/health", (req, res) => {
-  res.status(200).send("Server is healthy");
+  res.status(200).send({ message: "Server is healthy" });
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
 
 export default app;
