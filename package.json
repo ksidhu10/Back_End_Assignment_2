@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",  
+    "start": "node dist/app.js", 
+    "dev": "ts-node src/app.ts"
+    
   },
   "keywords": [],
   "author": "",
@@ -11,7 +14,7 @@
   "description": "",
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.12.0",
+    "@types/node": "^22.13.0",
     "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7",

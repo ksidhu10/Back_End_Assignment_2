@@ -1,24 +1,14 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist",
-        "resolveJsonModule": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "strictPropertyInitialization": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "baseUrl": "./",
-        "paths": {
-            "*": ["*"]
-        }
+      "target": "ES6", 
+      "module": "CommonJS", 
+      "outDir": "./dist",   // Ensure this is the directory for compiled JS files
+      "rootDir": "./src",   // All your TypeScript files are inside src/
+      "esModuleInterop": true,
+      "strict": true,
+      "skipLibCheck": true
     },
-    "include": ["src/**/*", "test/**/*", "config/**/*"],
-    "exclude": ["node_modules", "dist"]
-}
+    "include": ["src/**/*.ts"],  // Only include .ts files from src
+    "exclude": ["node_modules", "test"]  // Exclude node_modules and test folders from being copied
+  }
+  
