@@ -1,6 +1,5 @@
-
 const request = require('supertest');
-const app = require('../src/app');  // Assuming your Express app is exported from src/app.js
+const app = require('../src/app');  
 
 describe('Employee API', () => {
 
@@ -20,7 +19,7 @@ describe('Employee API', () => {
       });
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('id');
-    employeeId = response.body.id;  // Save the employee ID for later tests
+    employeeId = response.body.id;  
   });
 
   // Test Get All Employees
@@ -52,4 +51,30 @@ describe('Employee API', () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Employee deleted successfully');
   });
+});
+
+describe('Employee Endpoints', () => {
+  
+  // Test Get Employees for a specific branch
+  it('should fetch employees for a specific branch', async () => {
+    const response = await request(app).get('/api/v1/employees/branch/1');  // assuming route is `/api/v1/employees/branch/:branchId`
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);  // Response should be an array
+    expect(response.body.length).toBeGreaterThan(0);  // Ensure there are employees in the branch
+    response.body.forEach(employee => {
+      expect(employee.branchId).toBe('1');  // All employees should belong to branchId 1
+    });
+  });
+
+  // Test Get Employees for a specific department
+  it('should fetch employees for a specific department', async () => {
+    const response = await request(app).get('/api/v1/employees/department/Engineering');  // assuming route is `/api/v1/employees/department/:department`
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);  // Response should be an array
+    expect(response.body.length).toBeGreaterThan(0);  // Ensure there are employees in the department
+    response.body.forEach(employee => {
+      expect(employee.department).toBe('Engineering');  // All employees should belong to Engineering department
+    });
+  });
+
 });

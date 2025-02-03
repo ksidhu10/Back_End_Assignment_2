@@ -6,13 +6,13 @@ import { Express } from 'express';
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: "Employee Directory API",  // Your API title
-      description: "API for managing employees and their branches", // Description
-      version: "1.0.0",  // Version of your API
+      title: "Employee Directory API",  
+      description: "API for managing employees and their branches", 
+      version: "1.0.0",  
     },
-    basePath: "/api",  // Your base path for routes
+    basePath: "/api",  
   },
-  apis: ["./src/api/v1/routes/*.ts"],  // Path to your route files (for Swagger documentation)
+  apis: ["./src/api/v1/routes/*.ts"],  
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

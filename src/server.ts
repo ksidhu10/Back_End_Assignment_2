@@ -1,5 +1,5 @@
 import express from "express";
-import setupSwagger from "./swagger"; // Make sure the path to swagger setup is correct
+import setupSwagger from "./swagger"; 
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
 const app = express();
