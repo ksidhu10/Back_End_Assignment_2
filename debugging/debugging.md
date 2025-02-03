@@ -55,3 +55,25 @@ No, everything behaves as expected in this case.
 Input validation should be added to ensure that all necessary fields for creating a branch (name, address, phone) are provided.
 ## How does this enhance your understanding of the overall project?
 This confirms that the POST /branches request is functioning correctly and that data is being properly added to the system. It also shows that the flow from controller to service is working as expected.
+
+## Scenario 3: Logical Relationships Between Employees and Branches
+*Breakpoint Location:* employeeService.js, line 110 (getEmployeesByBranch method)
+*Objective:* Debugging the logic used to retrieve employees based on their branch ID.
+## Debugger Observations
+# Variable States:
+branchId: '1'
+filteredEmployees: [ { id: '1', name: 'Alice Johnson', branchId: '1' }, { id: '4', name: 'James Wilson', branchId: '1' } ]
+## Call Stack:
+getEmployeesByBranch in employeeService.js (line 110)
+getEmployeesByBranch in employeeController.js (line 50)
+# Behavior:
+The function correctly filters the employees based on the provided branchId ('1'). It returns an array containing employees who belong to branch 1, and the response is sent back to the client as expected.
+# Analysis
+## What did you learn from this scenario?
+The logic for filtering employees by branch is working correctly. The correct set of employees is returned based on the branch ID.
+## Did you observe any unexpected behavior? If so, what might be the cause?
+No unexpected behavior was observed during this process.
+## Are there areas for improvement or refactoring in this part of the code?
+We could add further optimization, such as checking for an invalid branch ID before making the query.
+## How does this enhance your understanding of the overall project?
+This demonstrates how logical relationships between employees and branches are managed. It highlights how filtering logic functions, improving my understanding of how data flows in the backend system.
