@@ -5,7 +5,7 @@ export interface Branch {
     phone: string;
   }
   
-let branches: Branch[] = [];  // Simulating an in-memory store
+let branches: Branch[] = [];  
 
 // Create a new branch
 export const createBranch = async (data: { name: string; address: string; phone: string }): Promise<Branch> => {

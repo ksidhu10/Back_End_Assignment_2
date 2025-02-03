@@ -10,7 +10,7 @@ app.use("/api/branches", branchRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
-  res.status(200).json({ message: "Server is healthy" });  // Returning JSON
+  res.status(200).json({ message: "Server is healthy" });  
 });
 
 
