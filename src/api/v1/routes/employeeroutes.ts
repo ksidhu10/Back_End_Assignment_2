@@ -1,5 +1,13 @@
 import express, { Request, Response } from "express";
-import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeControllers";
+import { 
+  createEmployee, 
+  getAllEmployees, 
+  getEmployeeById, 
+  updateEmployee, 
+  deleteEmployee, 
+  getEmployeesByBranch, 
+  getEmployeesByDepartment 
+} from "../controllers/employeeControllers";
 
 const router = express.Router();
 
@@ -219,6 +227,86 @@ router.put("/:id", (req: Request, res: Response) => {
  */
 router.delete("/:id", (req: Request, res: Response) => {
   deleteEmployee(req, res);
+});
+
+/**
+ * @openapi
+ * /employees/branch/{branchId}:
+ *   get:
+ *     description: Get all employees for a specific branch
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A list of employees in the specified branch
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   position:
+ *                     type: string
+ *                   department:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   phone:
+ *                     type: string
+ *                   branchId:
+ *                     type: integer
+ */
+router.get("/branch/:branchId", (req: Request, res: Response) => {
+  getEmployeesByBranch(req, res);
+});
+
+/**
+ * @openapi
+ * /employees/department/{department}:
+ *   get:
+ *     description: Get all employees in a specific department
+ *     parameters:
+ *       - in: path
+ *         name: department
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of employees in the specified department
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   position:
+ *                     type: string
+ *                   department:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   phone:
+ *                     type: string
+ *                   branchId:
+ *                     type: integer
+ */
+router.get("/department/:department", (req: Request, res: Response) => {
+  getEmployeesByDepartment(req, res);
 });
 
 export default router;
