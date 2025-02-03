@@ -106,3 +106,13 @@ export const deleteEmployee = (id: string): boolean => {
   }
   return false;
 };
+
+// Get all employees for a specific branch
+export const getEmployeesByBranch = (branchId: string): Employee[] => {
+  return employees.filter(employee => employee.branchId === branchId);
+};
+
+// Get all employees in a specific department
+export const getEmployeesByDepartment = (department: string): Employee[] => {
+  return employees.filter(employee => employee.department === department);
+};
