@@ -8,6 +8,7 @@ import {
   getEmployeesByBranch, 
   getEmployeesByDepartment 
 } from "../controllers/employeeControllers";
+import { validateEmployee } from "../Middleware/validate";
 
 const router = express.Router();
 
@@ -58,7 +59,7 @@ const router = express.Router();
  *                 branchId:
  *                   type: integer
  */
-router.post("/", (req: Request, res: Response) => {
+router.post("/", validateEmployee, (req: Request, res: Response) => {
   createEmployee(req, res);
 });
 
@@ -187,7 +188,7 @@ router.get("/:id", (req: Request, res: Response) => {
  *                 branchId:
  *                   type: integer
  */
-router.put("/:id", (req: Request, res: Response) => {
+router.put("/:id", validateEmployee, (req: Request, res: Response) => {
   updateEmployee(req, res);
 });
 

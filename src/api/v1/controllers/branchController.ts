@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as branchService from '../services/branchServices';
+import { validateBranch } from '../Middleware/validate'; // Import validation middleware
 
 // Create a new branch
 export const createBranch = async (req: Request, res: Response): Promise<void> => {

@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
+import { validateBranch } from "../Middleware/validate";
 
 const router = express.Router();
 
@@ -38,7 +39,7 @@ const router = express.Router();
  *                 phone:
  *                   type: string
  */
-router.post("/", (req: Request, res: Response) => {
+router.post("/", validateBranch, (req: Request, res: Response) => {
   createBranch(req, res);
 });
 
@@ -143,7 +144,7 @@ router.get("/:id", (req: Request, res: Response) => {
  *                 phone:
  *                   type: string
  */
-router.put("/:id", (req: Request, res: Response) => {
+router.put("/:id", validateBranch, (req: Request, res: Response) => {
   updateBranch(req, res);
 });
 
