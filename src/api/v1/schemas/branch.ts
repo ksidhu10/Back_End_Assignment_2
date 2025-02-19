@@ -1,10 +1,7 @@
 import Joi from 'joi';
 
-// Branch schema definition
-const branchSchema = Joi.object({
-  name: Joi.string().min(3).max(50).required(),
-  address: Joi.string().min(5).required(),
-  phone: Joi.string().pattern(/^[0-9]{10}$/).required()  // Assuming 10 digit phone number
+export const branchValidationSchema = Joi.object({
+  name: Joi.string().required(),
+  address: Joi.string().min(10).required(), // Ensure min length is properly set
+  phone: Joi.string().pattern(/^\d{10}$/).required(),
 });
-
-export default branchSchema;
