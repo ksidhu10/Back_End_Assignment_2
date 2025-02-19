@@ -1,5 +1,11 @@
-import express, { Request, Response } from "express";
-import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
+import express, { Request, Response, NextFunction } from "express";
+import { 
+  createBranch, 
+  getAllBranches, 
+  getBranchById, 
+  updateBranch, 
+  deleteBranch 
+} from "../controllers/branchController";
 
 const router = express.Router();
 
@@ -38,8 +44,8 @@ const router = express.Router();
  *                 phone:
  *                   type: string
  */
-router.post("/", (req: Request, res: Response) => {
-  createBranch(req, res);
+router.post("/", (req: Request, res: Response, next: NextFunction) => {
+  createBranch(req, res, next);
 });
 
 /**
@@ -66,8 +72,8 @@ router.post("/", (req: Request, res: Response) => {
  *                   phone:
  *                     type: string
  */
-router.get("/", (req: Request, res: Response) => {
-  getAllBranches(req, res);
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
+  getAllBranches(req, res, next);
 });
 
 /**
@@ -98,8 +104,8 @@ router.get("/", (req: Request, res: Response) => {
  *                 phone:
  *                   type: string
  */
-router.get("/:id", (req: Request, res: Response) => {
-  getBranchById(req, res);
+router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
+  getBranchById(req, res, next);
 });
 
 /**
@@ -143,8 +149,8 @@ router.get("/:id", (req: Request, res: Response) => {
  *                 phone:
  *                   type: string
  */
-router.put("/:id", (req: Request, res: Response) => {
-  updateBranch(req, res);
+router.put("/:id", (req: Request, res: Response, next: NextFunction) => {
+  updateBranch(req, res, next);
 });
 
 /**
@@ -175,8 +181,8 @@ router.put("/:id", (req: Request, res: Response) => {
  *                 phone:
  *                   type: string
  */
-router.delete("/:id", (req: Request, res: Response) => {
-  deleteBranch(req, res);
+router.delete("/:id", (req: Request, res: Response, next: NextFunction) => {
+  deleteBranch(req, res, next);
 });
 
 export default router;
