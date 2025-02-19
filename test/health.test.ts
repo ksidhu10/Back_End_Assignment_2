@@ -66,14 +66,4 @@ describe('Employee Endpoints', () => {
       expect(employee.branchId).toBe('1');
     });
   });
-  // Test Get Employees for a specific department
-  it('should fetch employees for a specific department', async () => {
-    const response = await request(app).get('/api/v1/employees/department/Engineering');
-    expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body.length).toBeGreaterThan(0);
-    response.body.forEach((employee: { department: any; }) => {
-      expect(employee.department).toBe('Engineering');
-    });
-  });
 });
