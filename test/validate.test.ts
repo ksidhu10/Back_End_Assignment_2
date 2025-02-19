@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import employeeValidationSchema from '../src/api/v1/schemas/employee';
-import { branchValidationSchema } from '../src/api/v1/schemas/branch';
+import branchValidationSchema from '../src/api/v1/schemas/branch';
 
 describe('Validation Schemas', () => {
   // Employee Schema Validation Tests
@@ -61,15 +61,16 @@ describe('Validation Schemas', () => {
       expect(error).toBeUndefined(); // No validation error
     });
     it('should fail if branch name is too short', () => {
-      const invalidBranch = {
-        name: 'Br', // Invalid branch name (too short)
-        address: '123 Main St, City, Country',
-        phone: '1234567890',
-      };
-      const { error } = branchValidationSchema.validate(invalidBranch);
-      expect(error).toBeDefined(); // Validation error expected
-      expect(error?.details[0].message).toContain('name'); // The error should be about the 'name'
-    });
+        const invalidBranch = {
+          name: 'Br', // Name is too short
+          address: '123 Main St',
+          phone: '1234567890',
+        };
+  
+        const { error } = branchValidationSchema.validate(invalidBranch);
+        expect(error).toBeDefined(); // Ensure that error is actually returned
+        expect(error?.details[0].message).toContain('name'); // The error should be about the 'name'
+      });
     it('should fail if branch address is too short', () => {
       const invalidBranch = {
         name: 'Main Branch',
