@@ -1,96 +1,173 @@
-import { Request, Response, NextFunction } from 'express';
-import * as employeeService from '../services/employeeService';
+import { Request, Response, NextFunction } from "express";
+import * as employeeService from "../services/employeeService";
+import { successResponse, errorResponse } from "../models/responsemodel";
+import type { Employee } from "../interfaces/EmployeeInterface";
 
-// Create a new employee
-export const createEmployee = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const employee = await employeeService.createEmployee(req.body);
-    return res.status(201).json(employee); // Respond with the newly created employee
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error creating employee' });
-  }
-};
-
-// Get all employees
-export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const employees = await employeeService.getAllEmployees();
-    return res.status(200).json(employees); // Respond with all employees
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error fetching employees' });
-  }
-};
-
-// Get an employee by ID
-export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const employee = await employeeService.getEmployeeById(req.params.id);
-    if (!employee) {
-      return res.status(404).json({ message: 'Employee not found' });
+/**
+ * Handles retrieving all employees.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const getAllEmployees = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const employees: Employee[] = await employeeService.fetchAllEmployees();
+        res.status(200).json(successResponse(employees, "Employees retrieved"));
+    } catch (error) {
+        next(error);
     }
-    return res.status(200).json(employee); // Respond with the employee details
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error fetching employee' });
-  }
 };
 
-// Update an employee's data
-export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const updatedEmployee = await employeeService.updateEmployee(req.params.id, req.body);
-    if (!updatedEmployee) {
-      return res.status(404).json({ message: 'Employee not found' });
+/**
+ * Handles creating a new employee.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const createEmployee = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    const { name, position, department, email, phone, branchId } = req.body;
+    
+    // Validation for required fields
+    const requiredFields = { name, position, department, email, phone, branchId };
+    for (const [field, value] of Object.entries(requiredFields)) {
+        if (!value) {
+            res.status(400).json(errorResponse(`${field} is required.`));
+            return;
+        }
     }
-    return res.status(200).json(updatedEmployee); // Respond with updated employee data
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error updating employee' });
-  }
+
+    try {
+        const newEmployee: Employee = await employeeService.createEmployee(req.body);
+        res.status(201).json(successResponse(newEmployee, "Employee created"));
+    } catch (error) {
+        next(error);
+    }
 };
 
-// Delete an employee
-export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const result = await employeeService.deleteEmployee(req.params.id);
-    if (!result) {
-      return res.status(404).json({ message: 'Employee not found' });
+/**
+ * Handles retrieving an employee by ID.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const getEmployeeById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const employeeId = req.params.id;
+        const employee: Employee | undefined = await employeeService.getEmployeeById(employeeId);
+
+        if (!employee) {
+            res.status(404).json(errorResponse("Employee not found"));
+            return;
+        }
+
+        res.status(200).json(successResponse(employee, "Employee retrieved"));
+    } catch (error) {
+        next(error);
     }
-    return res.status(200).json({ message: 'Employee deleted successfully' }); // Respond with success message
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error deleting employee' });
-  }
 };
 
-// Get all employees for a specific branch
-export const getEmployeesByBranch = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const branchId = req.params.branchId;
-    const employees = await employeeService.getEmployeesByBranch(branchId);
-    if (employees.length === 0) {
-      return res.status(404).json({ message: 'No employees found for this branch' });
+/**
+ * Handles retrieving employees by branch.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const getEmployeesByBranch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const branchId = req.params.branchId;
+        const employees = await employeeService.getEmployeesByBranch(branchId);
+        res.status(200).json(successResponse(employees, "Employees retrieved"));
+    } catch (error) {
+        next(error);
     }
-    return res.status(200).json(employees); // Respond with the list of employees for the branch
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error fetching employees by branch' });
-  }
 };
 
-// Get all employees in a specific department
-export const getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-  try {
-    const department = req.params.department;
-    const employees = await employeeService.getEmployeesByDepartment(department);
-    if (employees.length === 0) {
-      return res.status(404).json({ message: 'No employees found in this department' });
+/**
+ * Handles retrieving employees by department.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const getEmployeesByDepartment = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const department = req.params.department;
+        const employees = await employeeService.getEmployeesByDepartment(department);
+        res.status(200).json(successResponse(employees, "Employees retrieved"));
+    } catch (error) {
+        next(error);
     }
-    return res.status(200).json(employees); // Respond with the list of employees for the department
-  } catch (error) {
-    next(error); // pass error to the error handler
-    return res.status(500).json({ message: 'Error fetching employees by department' });
-  }
+};
+
+/**
+ * Handles updating an employee's details.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const updateEmployee = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const employeeId = req.params.id;
+        const updatedEmployee: Employee | null = await employeeService.updateEmployee(employeeId, req.body);
+
+        if (!updatedEmployee) {
+            res.status(404).json(errorResponse("Employee not found"));
+            return;
+        }
+
+        res.status(200).json(successResponse(updatedEmployee, "Employee updated"));
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * Handles deleting an employee.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
+export const deleteEmployee = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const employeeId = req.params.id;
+        await employeeService.deleteEmployee(employeeId);
+
+        res.status(200).json(successResponse({}, `Employee with ID ${employeeId} deleted successfully`));
+    } catch (error) {
+        next(error);
+    }
 };
