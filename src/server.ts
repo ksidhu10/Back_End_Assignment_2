@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet"; // Import Helmet
 import cors, { CorsOptions } from "cors"; // Import CORS with types
-import setupSwagger from "./swagger";
+import { setupSwagger } from "./swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
 dotenv.config(); // Load environment variables
