@@ -41,11 +41,11 @@ const router = express.Router();
  *                 example: "Engineering"
  *               email:
  *                 type: string
- *                 description: "Email should be in a valid format (e.g. user@example.com)"
+ *                 description: "Valid email format required"
  *                 example: "shubh.rapper@example.com"
  *               phone:
  *                 type: string
- *                 description: "Phone should be a 10-digit number without spaces or dashes"
+ *                 description: "10-digit number without spaces or dashes"
  *                 example: "1234567890"
  *               branchId:
  *                 type: string
@@ -53,6 +53,17 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Employee created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "emp123"
+ *                 name:
+ *                   type: string
+ *                   example: "Shubh Rapper"
  *       400:
  *         description: Bad request due to validation error
  */
@@ -67,6 +78,19 @@ router.post("/", validateRequest(createEmployeeSchema), createEmployee);
  *     responses:
  *       200:
  *         description: List of employees
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "emp123"
+ *                   name:
+ *                     type: string
+ *                     example: "John Doe"
  */
 router.get("/", getAllEmployees);
 
@@ -109,7 +133,6 @@ router.get("/:id", getEmployeeById);
  *           schema:
  *             type: object
  *             properties:
- *               properties:
  *               name:
  *                 type: string
  *                 example: "Shubh Rapper"
@@ -121,11 +144,11 @@ router.get("/:id", getEmployeeById);
  *                 example: "Engineering"
  *               email:
  *                 type: string
- *                 description: "Email should be in a valid format (e.g. user@example.com)"
+ *                 description: "Valid email format required"
  *                 example: "shubh.rapper@example.com"
  *               phone:
  *                 type: string
- *                 description: "Phone should be a 10-digit number without spaces or dashes"
+ *                 description: "10-digit number without spaces or dashes"
  *                 example: "1234567890"
  *               branchId:
  *                 type: string
@@ -175,6 +198,19 @@ router.delete("/:id", validateRequest(deleteEmployeeSchema), deleteEmployee);
  *     responses:
  *       200:
  *         description: List of employees in the specified branch
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "emp456"
+ *                   name:
+ *                     type: string
+ *                     example: "Jane Doe"
  */
 router.get("/branch/:branchId", getEmployeesByBranch);
 
@@ -193,6 +229,19 @@ router.get("/branch/:branchId", getEmployeesByBranch);
  *     responses:
  *       200:
  *         description: List of employees in the specified department
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "emp789"
+ *                   name:
+ *                     type: string
+ *                     example: "John Smith"
  */
 router.get("/department/:department", getEmployeesByDepartment);
 
