@@ -1,25 +1,27 @@
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import { Express } from 'express';
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import { Express } from "express";
 
-// Swagger definition options
-const swaggerOptions = {
-  swaggerDefinition: {
+const options = {
+  definition: {
+    openapi: "3.0.0",
     info: {
-      title: "Employee Directory API",  
-      description: "API for managing employees and their branches", 
-      version: "1.0.0",  
+      title: "My API Documentation",
+      version: "1.0.0",
+      description: "API documentation for my project",
     },
-    basePath: "/api",  
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Local server",
+      },
+    ],
   },
-  apis: ["./src/api/v1/routes/*.ts"],  
+  apis: ["./src/api/v1/routes/*.ts"], // Path to API routes
 };
 
-const swaggerSpec = swaggerJSDoc(swaggerOptions);
+const swaggerSpec = swaggerJsdoc(options);
 
-const setupSwagger = (app: Express): void => {
-  // Serving the Swagger UI at /api-docs
+export function setupSwagger(app: Express) {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-};
-
-export default setupSwagger;
+}
