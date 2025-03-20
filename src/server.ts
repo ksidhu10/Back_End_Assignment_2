@@ -8,7 +8,21 @@ dotenv.config(); // Configure dotenv
 
 const app = express();
 
-app.use(helmet()); // Apply Helmet security middleware
+// Apply Helmet security middleware with custom configuration
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://trusted-cdn.com"],
+      },
+    },
+    frameguard: { action: "deny" }, // Prevent Clickjacking
+    xssFilter: true, // Prevent XSS attacks
+    noSniff: true, // Prevent MIME sniffing
+    hidePoweredBy: true, // Remove "X-Powered-By" header
+  })
+);
 
 // Set up Swagger
 setupSwagger(app);
