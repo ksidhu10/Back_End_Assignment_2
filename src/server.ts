@@ -1,11 +1,14 @@
 import express from "express";
-import dotenv from "dotenv"; // Load environment variables
+import dotenv from "dotenv";
+import helmet from "helmet"; // Import Helmet
 import setupSwagger from "./swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
 dotenv.config(); // Configure dotenv
 
 const app = express();
+
+app.use(helmet()); // Apply Helmet security middleware
 
 // Set up Swagger
 setupSwagger(app);
