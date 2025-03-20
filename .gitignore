@@ -2,3 +2,4 @@ node_modules/
 dist/
 .vscode/
 .env
+echo "assignment3-7ad94-firebase-adminsdk-fbsvc-d89951242b.json" >> .gitignore
