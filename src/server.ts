@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet"; // Import Helmet
-import setupSwagger from "../config/swagger";
+import setupSwagger from "./swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
 dotenv.config(); // Configure dotenv
