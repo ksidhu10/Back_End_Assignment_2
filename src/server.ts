@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet"; // Import Helmet
-import cors from "cors"; // Import CORS
+import cors, { CorsOptions } from "cors"; // Import CORS with types
 import setupSwagger from "./swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
@@ -27,23 +27,23 @@ app.use(
 // ✅ Enable JSON Parsing for API Requests (Should be placed before routes)
 app.use(express.json());
 
-// ✅ CORS Configuration with Better Error Handling
+// ✅ CORS Configuration with Proper TypeScript Types
 const allowedOrigins = ["https://yourtrusteddomain.com", "https://anothertrusteddomain.com"];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Allow request
-      } else {
-        console.error(`Blocked CORS request from origin: ${origin}`);
-        callback(new Error("Not allowed by CORS"), false);
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    credentials: true, // Allow cookies and authentication headers
-  })
-);
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow request
+    } else {
+      console.error(`Blocked CORS request from origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+  credentials: true, // Allow cookies and authentication headers
+};
+
+app.use(cors(corsOptions));
 
 // ✅ Set up Swagger API Documentation
 setupSwagger(app);
