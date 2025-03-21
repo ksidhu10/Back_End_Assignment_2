@@ -9,7 +9,7 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 
-// ✅ Apply Helmet security middleware
+// Apply Helmet security middleware
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -24,10 +24,10 @@ app.use(
   })
 );
 
-// ✅ Enable JSON Parsing for API Requests (Should be placed before routes)
+// Enable JSON Parsing for API Requests (Should be placed before routes)
 app.use(express.json());
 
-// ✅ CORS Configuration with Proper TypeScript Types
+//  CORS Configuration with Proper TypeScript Types
 const allowedOrigins = ["https://yourtrusteddomain.com", "https://anothertrusteddomain.com"];
 
 const corsOptions: CorsOptions = {
@@ -45,21 +45,21 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 
-// ✅ Set up Swagger API Documentation
+//  Set up Swagger API Documentation
 setupSwagger(app);
 
-// ✅ Use Employee Routes
+//  Use Employee Routes
 app.use("/api/employees", employeeRoutes);
 
-// ✅ Health Check Route
+//  Health Check Route
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is healthy" });
 });
 
-// ✅ Start the Server on the Configured Port
+//  Start the Server on the Configured Port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
+  console.log(` Server is running on http://localhost:${PORT}`);
 });
 
 export default app;

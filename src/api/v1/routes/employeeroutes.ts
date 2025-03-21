@@ -1,21 +1,54 @@
-import express, { Request, Response, NextFunction } from "express";
-import { 
-    createEmployee, 
-    getAllEmployees, 
-    getEmployeeById, 
-    updateEmployee, 
-    deleteEmployee, 
-    getEmployeesByBranch, 
-    getEmployeesByDepartment 
+import express from "express";
+import {
+  createEmployee,
+  getAllEmployees,
+  getEmployeeById,
+  updateEmployee,
+  deleteEmployee,
+  getEmployeesByBranch,
+  getEmployeesByDepartment,
 } from "../controllers/employeeControllers";
 import { validateRequest } from "../middleware/validate";
-import { 
-    createEmployeeSchema, 
-    updateEmployeeSchema, 
-    deleteEmployeeSchema 
+import {
+  createEmployeeSchema,
+  updateEmployeeSchema,
+  deleteEmployeeSchema,
 } from "../schemas/employeeschemas";
 
 const router = express.Router();
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Employee:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "emp123"
+ *         name:
+ *           type: string
+ *           example: "Shubh Rapper"
+ *         position:
+ *           type: string
+ *           example: "Software Engineer"
+ *         department:
+ *           type: string
+ *           example: "Engineering"
+ *         email:
+ *           type: string
+ *           example: "shubh.rapper@example.com"
+ *         phone:
+ *           type: string
+ *           example: "1234567890"
+ *         branchId:
+ *           type: string
+ *           example: "branch123"
+ */
 
 /**
  * @openapi
@@ -28,42 +61,14 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Shubh Rapper"
- *               position:
- *                 type: string
- *                 example: "Software Engineer"
- *               department:
- *                 type: string
- *                 example: "Engineering"
- *               email:
- *                 type: string
- *                 description: "Valid email format required"
- *                 example: "shubh.rapper@example.com"
- *               phone:
- *                 type: string
- *                 description: "10-digit number without spaces or dashes"
- *                 example: "1234567890"
- *               branchId:
- *                 type: string
- *                 example: "branch123"
+ *             $ref: '#/components/schemas/Employee'
  *     responses:
  *       201:
  *         description: Employee created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                   example: "emp123"
- *                 name:
- *                   type: string
- *                   example: "Shubh Rapper"
+ *               $ref: '#/components/schemas/Employee'
  *       400:
  *         description: Bad request due to validation error
  */
@@ -83,14 +88,7 @@ router.post("/", validateRequest(createEmployeeSchema), createEmployee);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     example: "emp123"
- *                   name:
- *                     type: string
- *                     example: "John Doe"
+ *                 $ref: '#/components/schemas/Employee'
  */
 router.get("/", getAllEmployees);
 
@@ -109,6 +107,10 @@ router.get("/", getAllEmployees);
  *     responses:
  *       200:
  *         description: Employee details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Employee'
  *       404:
  *         description: Employee not found
  */
@@ -131,31 +133,14 @@ router.get("/:id", getEmployeeById);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Shubh Rapper"
- *               position:
- *                 type: string
- *                 example: "Software Engineer"
- *               department:
- *                 type: string
- *                 example: "Engineering"
- *               email:
- *                 type: string
- *                 description: "Valid email format required"
- *                 example: "shubh.rapper@example.com"
- *               phone:
- *                 type: string
- *                 description: "10-digit number without spaces or dashes"
- *                 example: "1234567890"
- *               branchId:
- *                 type: string
- *                 example: "branch123"
+ *             $ref: '#/components/schemas/Employee'
  *     responses:
  *       200:
  *         description: Employee updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Employee'
  *       400:
  *         description: Validation error
  *       404:
@@ -203,14 +188,7 @@ router.delete("/:id", validateRequest(deleteEmployeeSchema), deleteEmployee);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     example: "emp456"
- *                   name:
- *                     type: string
- *                     example: "Jane Doe"
+ *                 $ref: '#/components/schemas/Employee'
  */
 router.get("/branch/:branchId", getEmployeesByBranch);
 
@@ -234,14 +212,7 @@ router.get("/branch/:branchId", getEmployeesByBranch);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     example: "emp789"
- *                   name:
- *                     type: string
- *                     example: "John Smith"
+ *                 $ref: '#/components/schemas/Employee'
  */
 router.get("/department/:department", getEmployeesByDepartment);
 

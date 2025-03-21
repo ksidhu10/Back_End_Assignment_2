@@ -1,6 +1,5 @@
 import express from 'express';
 import branchRoutes from "./api/v1/routes/branchroutes";
-import setupSwagger from "../src/swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
 const app = express();
