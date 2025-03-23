@@ -1,79 +1,111 @@
 ## Debugging Analysis
 
 ## Scenario 1: Employee CRUD Operations
--  **Breakpoint Location:** employeeController.js, line 45 (createEmployee method)
--  **Objective:** Investigating how employee data is created and returned after the POST /employees request.
+-  **Breakpoint Location:** server.ts`, line 9 (`dotenv.config()` method
+-  **Objective:** Verifying that environment variables are loaded correctly before the app initializes routes and middleware.
 
 ## Debugger Observations
 # Variable States:
 
-**employeeData:** { name: 'John Doe', position: 'Developer', department: 'Engineering', email: 'john@example.com', phone: '123456789', branchId: '1' }
-**newEmployee:** { id: '7', name: 'John Doe', position: 'Developer', department: 'Engineering', email: 'john@example.com', phone: '123456789', branchId: '1' }
+- `__dirname`: `"C:\\Users\\Kiranjeet\\Desktop\\rrc_polytech\\courses\\Back_End_Assignment_2\\src"`
+- `dotenv_1`: `{ default: { ... } }` – confirms that the dotenv module is properly imported.
+- `helmet_1`: `{ default: [Function: helmet] }` – shows Helmet middleware is available.
+- `employeeRoutes`: `{ default: [Function] }` – confirms the employee route is loaded.
+- `swagger_1`: `{ setupSwagger: [Function] }` – shows Swagger is imported correctly.
 
 ## Call Stack:
 
-createEmployee in employeeController.js (line 45)
-createEmployee in employeeService.js (line 30)
+ Breakpoint hit at `dotenv.config()` in `server.ts`
+- Execution is paused before setting up Express app routes
 
 ## Behavior:
-The debugger shows that the createEmployee method is invoked with the correct data. A new employee is successfully added to the array of employees, and an ID is assigned to it. The system then responds with the employee object, including the assigned id.
+The debugger pauses right after loading environment variables.
+- `PORT`, `DATABASE_URL`, `FIREBASE_API_KEY` are expected to be pulled from `.env`, confirming early setup is functioning.
 
 ## Analysis
 
 ## What did you learn from this scenario?
-The POST /employees endpoint correctly creates a new employee and assigns an ID. The function to add a new employee is working as expected.
+This confirms that your `.env` variables are being processed correctly using `dotenv.config()` before initializing routes and server logic.
+- The application has no runtime errors up to this point, and the debugger confirms modules are correctly initialized.
 ## Did you observe any unexpected behavior? If so, what might be the cause?
-No unexpected behavior was observed in this scenario.
+No unexpected behavior was observed. All imports and variables are loading properly.
 ## Are there areas for improvement or refactoring in this part of the code?
-Yes, there should be validation for the employee data to ensure the required fields (like name, email, etc.) are not empty before the employee is created.
+- You can add a fallback logger to warn if any required environment variables are missing.
+- Consider validating `process.env` keys like `PORT` and `FIREBASE_API_KEY`.
 ## How does this enhance your understanding of the overall project?
-This reinforces how employee creation flows through the controller and service layers. It also highlights the importance of input validation.
+It shows the importance of loading configuration early before any logic runs.
+- This scenario also reinforces your understanding of how middleware and configurations (like Helmet, Swagger, Routes) depend on proper environment setup.
 
-## Scenario 2: Branch Management Logic
-*Breakpoint Location:* branchController.js, line 60 (createBranch method)
-*Objective:* Investigating how branch data is handled during the branch creation process.
+## Scenario 2: Middleware & Security Enhancements
+*Breakpoint Location:* server.ts`, line 13 (`app.use(helmet(...))`)
+*Objective:* Verifying that Helmet security middleware is correctly applied and that the server starts with security headers configured.
 
 ## Debugger Observations
 # Variable States:
 
-*branchData:* { name: 'Main Branch', address: '123 Main St', phone: '123-456-7890' }
-*newBranch:* { id: '2', name: 'Main Branch', address: '123 Main St', phone: '123-456-7890' }
+helmet_1`: `{ default: [Function: helmet] }` – Helmet is successfully imported.
+- `employeeRoutes_1`: `{ default: [...] }` – Confirms routes are available.
+- `dotenv_1`: `{ default: [...] }` – Environment variables are loaded.
+- `app`: Function confirms Express app is created.
+- `__dirname`, `__filename`: Show correct file path, indicating proper working directory.
 
 ## Call Stack:
-createBranch in branchController.js (line 60)
-createBranch in branchService.js (line 25)
+- Execution paused on line 13 in `server.ts` inside `app.use()` while applying middleware.
+- Helmet is being configured with custom `contentSecurityPolicy` directives:
+- `defaultSrc`: `["'self'"]`
 
 ## Behavior:
-The debugger shows that the createBranch function is invoked with the provided branch data, which is valid. The newBranch object is created successfully and added to the in-memory data, reflecting the newly created branch.
+- Application successfully starts and listens on `http://localhost:3000`.
+- Firebase initializes properly (`Firebase initialized successfully`).
+- Debugger shows Helmet middleware is applied without throwing errors.
+- A deprecation warning for the `punycode` module appears but doesn’t affect execution.
 
 ## Analysis
 ## What did you learn from this scenario?
-The branch creation process works as expected. The function successfully processes the request and returns the newly created branch with an ID.
+- The Helmet middleware setup is working and helps secure HTTP headers.
+- The use of `contentSecurityPolicy` is correctly configured to control the sources of scripts and default resources.
 ## Did you observe any unexpected behavior? If so, what might be the cause?
-No, everything behaves as expected in this case.
+No errors occurred during Helmet setup. Only a warning about the deprecated `punycode` module, which is unrelated to security configuration.
 ## Are there areas for improvement or refactoring in this part of the code?
-Input validation should be added to ensure that all necessary fields for creating a branch (name, address, phone) are provided.
+- Consider reviewing dependencies and updating or replacing deprecated modules like `punycode`.
+- Add conditionally loaded middleware (e.g., Helmet only for production).
 ## How does this enhance your understanding of the overall project?
-This confirms that the POST /branches request is functioning correctly and that data is being properly added to the system. It also shows that the flow from controller to service is working as expected.
+- Reinforces the importance of applying security middleware early in the middleware stack.
+- Shows how HTTP headers can be secured to protect the application from XSS and other attacks.
 
-## Scenario 3: Logical Relationships Between Employees and Branches
-*Breakpoint Location:* employeeService.js, line 110 (getEmployeesByBranch method)
-*Objective:* Debugging the logic used to retrieve employees based on their branch ID.
+## Scenario 3: CORS and API Routing
+*Breakpoint Location:* server.ts`, line 52 (`setupSwagger(app);`
+*Objective:* Confirm that CORS configuration and API documentation setup are applied before the app serves employee routes and starts listening.
 ## Debugger Observations
 # Variable States:
-branchId: '1'
-filteredEmployees: [ { id: '1', name: 'Alice Johnson', branchId: '1' }, { id: '4', name: 'James Wilson', branchId: '1' } ]
+- `corsOptions`: Includes:
+  - `origin`: A function allowing cross-origin requests
+  - `methods`: `["GET", "POST", "PUT", "DELETE"]`
+  - `credentials`: `true`
+- `employeeRoutes_1`: `{ default: [Function] }` – route handlers are loaded
+- `setupSwagger`: Confirmed as a callable function
+- `app`: The Express app is initialized and middleware is being applied
+- `allowedOrigins`: Contains expected domains for CORS
 ## Call Stack:
-getEmployeesByBranch in employeeService.js (line 110)
-getEmployeesByBranch in employeeController.js (line 50)
+- Execution pauses at the Swagger setup function
+- This happens after CORS middleware is added (`app.use(cors(corsOptions))`) and before route registration
 # Behavior:
-The function correctly filters the employees based on the provided branchId ('1'). It returns an array containing employees who belong to branch 1, and the response is sent back to the client as expected.
+- Debugger pauses at the point where Swagger is being initialized.
+- Firebase is successfully initialized (as shown in terminal output).
+- Debug session confirms all middlewares are executing in the correct order.
+- No runtime errors or exceptions were thrown up to this point.
+
 # Analysis
 ## What did you learn from this scenario?
-The logic for filtering employees by branch is working correctly. The correct set of employees is returned based on the branch ID.
+- The sequence of middleware execution is crucial: CORS and Swagger must be applied before routes are used.
+- The Swagger documentation is initialized successfully, and the app is set to respond to API calls.
 ## Did you observe any unexpected behavior? If so, what might be the cause?
-No unexpected behavior was observed during this process.
+No unexpected behavior was observed. CORS and Swagger initialized properly.
 ## Are there areas for improvement or refactoring in this part of the code?
-We could add further optimization, such as checking for an invalid branch ID before making the query.
+- Could modularize middleware setup into a separate file for better maintainability.
+- Add CORS origin validation for extra security (e.g., restrict to specific domains only).
+
 ## How does this enhance your understanding of the overall project?
-This demonstrates how logical relationships between employees and branches are managed. It highlights how filtering logic functions, improving my understanding of how data flows in the backend system.
+Reinforces how the Express middleware stack flows.
+- Highlights that the order of setup (CORS > Swagger > Routes) is essential for a working and secure API.
+- Shows successful integration between environment setup, routing, and documentation tools like Swagger.

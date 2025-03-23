@@ -16,10 +16,10 @@ const options = {
       }
     ]
   },
-  apis: ["./src/api/v1/routes/*.ts"] // ✅ Fixed the path here
+  apis: ["./src/api/v1/routes/*.ts"] 
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 fs.writeFileSync("./openapi.json", JSON.stringify(swaggerSpec, null, 2));
-console.log("✅ openapi.json generated successfully!");
+console.log(" openapi.json generated successfully!");
