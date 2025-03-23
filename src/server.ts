@@ -5,7 +5,8 @@ import cors, { CorsOptions } from "cors"; // Import CORS with types
 import { setupSwagger } from "./swagger";
 import employeeRoutes from "./api/v1/routes/employeeroutes";
 
-dotenv.config(); // Load environment variables
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
@@ -27,39 +28,44 @@ app.use(
 // Enable JSON Parsing for API Requests (Should be placed before routes)
 app.use(express.json());
 
-//  CORS Configuration with Proper TypeScript Types
-const allowedOrigins = ["https://yourtrusteddomain.com", "https://anothertrusteddomain.com"];
+// CORS Configuration with Proper TypeScript Types
+const allowedOrigins = [
+  "https://yourtrusteddomain.com",
+  "https://anothertrusteddomain.com",
+];
 
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // Allow request
     } else {
-      console.error(`Blocked CORS request from origin: ${origin}`);
+      console.error(` Blocked CORS request from origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-  credentials: true, // Allow cookies and authentication headers
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 
-//  Set up Swagger API Documentation
+// Set up Swagger API Documentation
 setupSwagger(app);
 
-//  Use Employee Routes
+// Use Employee Routes
 app.use("/api/employees", employeeRoutes);
 
-//  Health Check Route
+// Health Check Route
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is healthy" });
 });
 
-//  Start the Server on the Configured Port
+// Start the Server on the Configured Port
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(` Connected to database: ${process.env.DATABASE_URL}`);
 });
 
 export default app;
