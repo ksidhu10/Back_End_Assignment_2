@@ -37,7 +37,7 @@ const allowedOrigins = [
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow request
+      callback(null, true); // Allow to access request
     } else {
       console.error(` Blocked CORS request from origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
@@ -69,3 +69,4 @@ app.listen(PORT, () => {
 });
 
 export default app;
+
